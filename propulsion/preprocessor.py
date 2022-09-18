@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 from scipy import signal
 from filters import LowPassFilter
 
-class Solver:
+class Preprocessor:
     def __init__(self, prefix, trt, rep_num, data):
         self.name = prefix + '-' + trt +'-' +rep_num
         self.dir = 'figures/' + prefix + '/'
@@ -56,24 +56,33 @@ class Solver:
         pressure = inputdata[:, 2]
 
         ylim = self.find_ylim(thrust, pressure)
-        ax.set_ylim(ylim)
-        ax.set_ylim(-0.02, ylim[1])
+        # ax.set_ylim(ylim)
+        ax.set_ylim(-1, ylim[1])
 
         ax.plot(t, thrust, t, pressure)
         ax.grid(True)
-        ax.legend(['thrust[V]', 'pressure[V]'])
+        ax.legend(['thrust[N]', 'pressure[bar]'])
         #ax.set_aspect('equal', 'box')
         #ax.set_title(name)
         return fig
 
     def run(self):
         #Low pass filtering
-        filtered = np.zeros(self.raw.shape)
-        filtered[:, 0] = self.raw[:, 0]
-        filtered[:, 1] = self.filtering(self.raw[:, 1])
-        filtered[:, 2] = self.filtering(self.raw[:, 2])
+        preprocessed = np.zeros(self.raw.shape)
+        preprocessed[:, 0] = self.raw[:, 0]
+        preprocessed[:, 1] = self.filtering(self.raw[:, 1])
+        preprocessed[:, 2] = self.filtering(self.raw[:, 2])
 
         #Zeroing for thrust
-        filtered[:, 1] = self.zeroing(filtered[:, 1])
-        fig = self.plot(filtered, self.name)
-        self.save_plot(fig, self.name)
+        preprocessed[:, 1] = self.zeroing(preprocessed[:, 1])
+
+        #Scaling
+        V_TO_BAR = 10.0512
+        V_TO_N = 109.7
+        preprocessed[:, 1] = self.convert_scale(preprocessed[:, 1], V_TO_N)
+        preprocessed[:, 2] = self.convert_scale(preprocessed[:, 2], V_TO_BAR)
+  
+        #Plot and Save
+        # fig = self.plot(preprocessed, self.name)
+        # self.save_plot(fig, self.name)
+        return preprocessed
