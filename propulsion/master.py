@@ -37,4 +37,12 @@ if __name__ == "__main__":
             preprocessed = pp.run()
             preprocessed_data[trt].append(preprocessed)
 
+    mdot_data = generate_data_dict()
+    for trt, replicates in rawdata.items():
+        for i, rep in enumerate(replicates):
+            pp = Calculator(prefix, trt, str(i), rep, 'mdot')
+            mdot = pp.run()
+            mdot_data[trt].append(mdot)
+
+
     print(preprocessed_data)
