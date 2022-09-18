@@ -20,7 +20,7 @@ def generate_data_dict():
                     '10bar':[], '14bar':[]}
 
 if __name__ == "__main__":
-    prefix = 'exit_pressure'
+    prefix = 'thrust'
 
     #Load raw data
     rawdata = generate_data_dict()    
@@ -43,8 +43,19 @@ if __name__ == "__main__":
     for trt, replicates in preprocessed_data.items():
         for i, rep in enumerate(replicates):
             cc = Calculator(prefix, trt, str(i), rep)
-            output = cc.run('exit_pressure')
+            output = cc.run('mdot')
             mdot_data[trt].append(output)
+
+    P_e_data = generate_data_dict()
+    for trt, replicates in preprocessed_data.items():
+        for i, rep in enumerate(replicates):
+            cc = Calculator(prefix, trt, str(i), rep)
+            output = cc.run('exit_pressure')
+            P_e_data[trt].append(output)
+
+    mdot_and_P_e_data = generate_data_dict()
+    #TODO for 2-1 
+ 
     #Plot
     for trt, replicates in mdot_data.items():
 

@@ -12,7 +12,22 @@ class Calculator:
         self.R = 0.2598 #gas constant
         self.M = 2.94
 
+        #2-1
+        self.T_e = self.calc_T_e()
+        self.V_e = calc_V_e()
+        self.P_b = 1 #bar
+        self.A_e = 4 * self.Astar
+        
 
+    def calc_T_e(self):
+        a = (self.gamma - 1) / 2
+        b = 1 + a*(self.M**2)
+        return self.T / b
+    def calc_V_e(self):
+        a = self.gamma * self.R * self.T_e
+        b = math.sqrt(a)
+        return self.M * b
+ 
     def calc_mdot(self, P):
 
         P = P
@@ -37,6 +52,17 @@ class Calculator:
         c = - gamma / (gamma - 1)
         return input*(b**c)
 
+    def calc_thrust(self, mdot, P_e):
+        mdot = mdot
+        V_e = self.V_e
+        P_e = P_e
+        P_b = self.P_b
+        A_e = self.A_e
+        
+        a = mdot*V_e
+        b = (P_e - P_b) * A_e
+        return a + b
+
     def run(self, target):
         if target == "mdot":
             output = np.zeros(self.input.shape)
@@ -50,6 +76,13 @@ class Calculator:
             output[:, 0] = self.input[:, 0]
             for i, P in enumerate(self.input[:, 2]):
                 output[i, 1] = self.calc_exit_pressure(P) 
+            return output
+
+        elif target == "thrust":
+            output = np.zeros(self.input.shape)
+            output[:, 0] = self.input[:, 0]
+            for i, vec in enumerate(self.input):
+                output[i, 1] = self.calc_thrust(vec[1], vec[2]) #mdot, P_e
             return output
 
 
