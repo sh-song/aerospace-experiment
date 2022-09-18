@@ -18,7 +18,7 @@ def generate_data_dict():
                     '10bar':[], '14bar':[]}
 
 if __name__ == "__main__":
-    prefix = 'scaled-ylim_fixed'
+    prefix = 'preprocessed'
 
     #Load raw data
     rawdata = generate_data_dict()    

@@ -31,8 +31,8 @@ class Preprocessor:
         return (min1 if min1<min2 else min2,
                 max1 if max1>max2 else max2) 
         
-    def filtering(self, data):
-        lpf = LowPassFilter(2, 0.01)
+    def filtering(self, data, cutoff):
+        lpf = LowPassFilter(cutoff, 0.01)
         filtered = np.zeros(data.shape)
         for i, val in enumerate(data):
             print(i, val)
@@ -40,7 +40,7 @@ class Preprocessor:
         return filtered
     
     def zeroing(self, data):
-        target_range = len(data) // 10
+        target_range = len(data) // 5
         front_mean = np.mean(data[:target_range])
         back_mean = np.mean(data[target_range:])
         offset = (front_mean + back_mean) / 2
@@ -70,8 +70,8 @@ class Preprocessor:
         #Low pass filtering
         preprocessed = np.zeros(self.raw.shape)
         preprocessed[:, 0] = self.raw[:, 0]
-        preprocessed[:, 1] = self.filtering(self.raw[:, 1])
-        preprocessed[:, 2] = self.filtering(self.raw[:, 2])
+        preprocessed[:, 1] = self.filtering(self.raw[:, 1], 0.2)
+        preprocessed[:, 2] = self.filtering(self.raw[:, 2], 2)
 
         #Zeroing for thrust
         preprocessed[:, 1] = self.zeroing(preprocessed[:, 1])
@@ -83,6 +83,6 @@ class Preprocessor:
         preprocessed[:, 2] = self.convert_scale(preprocessed[:, 2], V_TO_BAR)
   
         #Plot and Save
-        # fig = self.plot(preprocessed, self.name)
-        # self.save_plot(fig, self.name)
+        fig = self.plot(preprocessed, self.name)
+        self.save_plot(fig, self.name)
         return preprocessed
