@@ -3,7 +3,7 @@ import os
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy import signal
-from filters import LowPassFilter as LPF
+from filters import LowPassFilter
 
 class Solver:
     def __init__(self, prefix, trt, rep_num, data):
@@ -31,6 +31,21 @@ class Solver:
         return (min1 if min1<min2 else min2,
                 max1 if max1>max2 else max2) 
         
+    def filtering(self, data):
+        lpf = LowPassFilter(2, 0.01)
+        filtered = np.zeros(data.shape)
+        for i, val in enumerate(data):
+            print(i, val)
+            filtered[i] = lpf.filter(val)
+        return filtered
+    
+    def zeroing(self, data):
+        target_range = len(data) // 10
+        front_mean = np.mean(data[:target_range])
+        back_mean = np.mean(data[target_range:])
+        offset = (front_mean + back_mean) / 2
+        return data - offset
+
     def plot(self, inputdata, name):
         fig, ax = plt.subplots(1,1)
         fig.set_size_inches(15, 5)
@@ -41,7 +56,8 @@ class Solver:
         pressure = inputdata[:, 2]
 
         ylim = self.find_ylim(thrust, pressure)
-        ax.set_ylim(-0.05, ylim[1])
+        ax.set_ylim(ylim)
+        ax.set_ylim(-0.02, ylim[1])
 
         ax.plot(t, thrust, t, pressure)
         ax.grid(True)
@@ -51,5 +67,13 @@ class Solver:
         return fig
 
     def run(self):
-        fig = self.plot(self.raw, self.name)
+        #Low pass filtering
+        filtered = np.zeros(self.raw.shape)
+        filtered[:, 0] = self.raw[:, 0]
+        filtered[:, 1] = self.filtering(self.raw[:, 1])
+        filtered[:, 2] = self.filtering(self.raw[:, 2])
+
+        #Zeroing for thrust
+        filtered[:, 1] = self.zeroing(filtered[:, 1])
+        fig = self.plot(filtered, self.name)
         self.save_plot(fig, self.name)

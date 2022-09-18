@@ -28,7 +28,7 @@ def load_data(rawdata_dir):
 
 if __name__ == "__main__":
     data = load_data('rawdata/')
-    prefix = 'raw-ylim_fixed'
+    prefix = 'zeroed-ylim_fixed'
     for treatment, replicates in data.items():
         for i, rep in enumerate(replicates):
             ss = Solver(prefix, treatment, str(i), rep)

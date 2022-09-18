@@ -1,3 +1,4 @@
+import numpy as np
 class LowPassFilter(object):
     def __init__(self, cut_off_freqency, ts):
     	# cut_off_freqency: 차단 주파수
