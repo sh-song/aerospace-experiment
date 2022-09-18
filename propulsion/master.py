@@ -20,7 +20,7 @@ def generate_data_dict():
                     '10bar':[], '14bar':[]}
 
 if __name__ == "__main__":
-    prefix = 'ttttest'
+    prefix = 'mdot'
 
     #Load raw data
     rawdata = generate_data_dict()    
@@ -39,19 +39,18 @@ if __name__ == "__main__":
             preprocessed = pp.run()
             preprocessed_data[trt].append(preprocessed)
 
-    # mdot_data = generate_data_dict()
-    # for trt, replicates in rawdata.items():
-    #     for i, rep in enumerate(replicates):
-    #         cc = Calculator(prefix, trt, str(i), rep, 'mdot')
-    #         mdot = cc.run()
-    #         mdot_data[trt].append(mdot)
+    mdot_data = generate_data_dict()
+    for trt, replicates in preprocessed_data.items():
+        for i, rep in enumerate(replicates):
+            cc = Calculator(prefix, trt, str(i), rep)
+            mdot = cc.run('mdot')
+            mdot_data[trt].append(mdot)
     #Plot
-    for trt, replicates in rawdata.items():
+    print(mdot_data)
+    for trt, replicates in mdot_data.items():
 
         for i, rep in enumerate(replicates):
  
-            plotter = Plotter(prefix, trt, str(i))
+            plotter = Plotter(prefix, trt, str(i), target=(1,2))
             plotter.save_plot(rep)
     
-
-    print(preprocessed_data)
