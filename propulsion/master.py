@@ -6,6 +6,8 @@ import matplotlib.pyplot as plt
 from scipy import signal
 from filters import LowPassFilter as LPF
 from preprocessor import Preprocessor
+from calculator import Calculator
+from plotter import Plotter
 def load_data(rawdata_dir, filename):
         trt = filename.split('_')[1]
         file_dir = rawdata_dir + filename
@@ -18,7 +20,7 @@ def generate_data_dict():
                     '10bar':[], '14bar':[]}
 
 if __name__ == "__main__":
-    prefix = 'preprocessed'
+    prefix = 'ttttest'
 
     #Load raw data
     rawdata = generate_data_dict()    
@@ -37,12 +39,19 @@ if __name__ == "__main__":
             preprocessed = pp.run()
             preprocessed_data[trt].append(preprocessed)
 
-    mdot_data = generate_data_dict()
+    # mdot_data = generate_data_dict()
+    # for trt, replicates in rawdata.items():
+    #     for i, rep in enumerate(replicates):
+    #         cc = Calculator(prefix, trt, str(i), rep, 'mdot')
+    #         mdot = cc.run()
+    #         mdot_data[trt].append(mdot)
+    #Plot
     for trt, replicates in rawdata.items():
-        for i, rep in enumerate(replicates):
-            pp = Calculator(prefix, trt, str(i), rep, 'mdot')
-            mdot = pp.run()
-            mdot_data[trt].append(mdot)
 
+        for i, rep in enumerate(replicates):
+ 
+            plotter = Plotter(prefix, trt, str(i))
+            plotter.save_plot(rep)
+    
 
     print(preprocessed_data)
