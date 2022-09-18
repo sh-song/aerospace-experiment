@@ -13,9 +13,9 @@ class Calculator:
         self.M = 2.94
 
 
-    def calc_mdot(self):
+    def calc_mdot(self, P):
 
-        P = self.input
+        P = P
         Astar = self.Astar
         T = self.T
         gamma = self.gamma
@@ -25,7 +25,6 @@ class Calculator:
         b = math.sqrt(gamma / R)
         c = (gamma + 1) / 2
         d = -(gamma + 1) / (2*gamma - 2)
-        print(a*b*(c**d))
         return a*b*(c**d)
 
     def calc_exit_pressure(self, input):
@@ -40,7 +39,11 @@ class Calculator:
 
     def run(self, target):
         if target == "mdot":
-            return self.calc_mdot()
+            output = np.zeros(self.input.shape)
+            output[:, 0] = self.input[:, 0]
+            for i, P in enumerate(self.input[:, 2]):
+                output[i, 1] = self.calc_mdot(P) 
+            return output
 
         elif target == "exit_pressure":
             return self.exit_pressure()

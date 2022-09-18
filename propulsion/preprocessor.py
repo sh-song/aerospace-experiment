@@ -35,7 +35,6 @@ class Preprocessor:
         lpf = LowPassFilter(cutoff, 0.01)
         filtered = np.zeros(data.shape)
         for i, val in enumerate(data):
-            print(i, val)
             filtered[i] = lpf.filter(val)
         return filtered
     
@@ -83,6 +82,6 @@ class Preprocessor:
         preprocessed[:, 2] = self.convert_scale(preprocessed[:, 2], V_TO_BAR)
   
         #Plot and Save
-        fig = self.plot(preprocessed, self.name)
-        self.save_plot(fig, self.name)
+        # fig = self.plot(preprocessed, self.name)
+        # self.save_plot(fig, self.name)
         return preprocessed

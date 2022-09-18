@@ -21,13 +21,16 @@ class Plotter:
     def visualize(self, rep):
         pass
 
-    def save_plot(self, rep):
-        fig = self.plot(rep, self.name)
+    def save_plot(self, rep, isOne=False):
+        if isOne:
+            fig = self.plot_one(rep, self.name)
+        else:
+            fig = self.plot_two(rep, self.name)
         if not os.path.exists(self.dir):
             os.makedirs(self.dir)
         fig.savefig(self.dir + self.name + '.png')
 
-    def plot(self, inputdata, name):
+    def plot_two(self, inputdata, name):
         fig, ax = plt.subplots(1,1)
         fig.set_size_inches(15, 5)
         fig.suptitle(name, fontsize=16)
@@ -44,3 +47,15 @@ class Plotter:
         ax.grid(True)
         ax.legend(['thrust[N]', 'pressure[bar]'])
         return fig
+
+    def plot_one(self, inputdata, name):
+        fig, ax = plt.subplots(1,1)
+        fig.set_size_inches(15, 5)
+        fig.suptitle(name, fontsize=16)
+        t = inputdata[:, 0].tolist()
+        y1 = inputdata[:, 1].tolist()
+        ax.plot(t, y1, label='mdot[kg/s]')
+        ax.grid(True)
+        ax.legend()
+        return fig
+

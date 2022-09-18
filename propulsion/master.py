@@ -43,14 +43,13 @@ if __name__ == "__main__":
     for trt, replicates in preprocessed_data.items():
         for i, rep in enumerate(replicates):
             cc = Calculator(prefix, trt, str(i), rep)
-            mdot = cc.run('mdot')
-            mdot_data[trt].append(mdot)
+            output = cc.run('mdot')
+            mdot_data[trt].append(output)
     #Plot
-    print(mdot_data)
     for trt, replicates in mdot_data.items():
 
         for i, rep in enumerate(replicates):
  
             plotter = Plotter(prefix, trt, str(i), target=(1,2))
-            plotter.save_plot(rep)
+            plotter.save_plot(rep, True)
     
