@@ -46,5 +46,11 @@ class Calculator:
             return output
 
         elif target == "exit_pressure":
-            return self.exit_pressure()
+            output = np.zeros(self.input.shape)
+            output[:, 0] = self.input[:, 0]
+            for i, P in enumerate(self.input[:, 2]):
+                output[i, 1] = self.calc_exit_pressure(P) 
+            return output
+
+
         

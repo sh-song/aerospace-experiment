@@ -54,7 +54,7 @@ class Plotter:
         fig.suptitle(name, fontsize=16)
         t = inputdata[:, 0].tolist()
         y1 = inputdata[:, 1].tolist()
-        ax.plot(t, y1, label='mdot[kg/s]')
+        ax.plot(t, y1, label='exit pressure[bar]')
         ax.grid(True)
         ax.legend()
         return fig

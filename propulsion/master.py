@@ -20,7 +20,7 @@ def generate_data_dict():
                     '10bar':[], '14bar':[]}
 
 if __name__ == "__main__":
-    prefix = 'mdot'
+    prefix = 'exit_pressure'
 
     #Load raw data
     rawdata = generate_data_dict()    
@@ -43,7 +43,7 @@ if __name__ == "__main__":
     for trt, replicates in preprocessed_data.items():
         for i, rep in enumerate(replicates):
             cc = Calculator(prefix, trt, str(i), rep)
-            output = cc.run('mdot')
+            output = cc.run('exit_pressure')
             mdot_data[trt].append(output)
     #Plot
     for trt, replicates in mdot_data.items():
