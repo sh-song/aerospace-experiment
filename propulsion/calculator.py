@@ -14,7 +14,7 @@ class Calculator:
 
         #2-1
         self.T_e = self.calc_T_e()
-        self.V_e = calc_V_e()
+        self.V_e = self.calc_V_e()
         self.P_b = 1 #bar
         self.A_e = 4 * self.Astar
         
