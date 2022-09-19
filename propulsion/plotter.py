@@ -3,10 +3,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 class Plotter:
-    def __init__(self, prefix, trt, rep_num, target):
+    def __init__(self, prefix, trt, rep_num):
         self.name = prefix + '-' + trt +'-' +rep_num
         self.dir = 'figures/' + prefix + '/'
-        self.target = target
     def find_ylim(self, vec1, vec2):
         min1 = np.amin(vec1)
         max1 = np.amax(vec1)
@@ -45,7 +44,7 @@ class Plotter:
 
         ax.plot(t, thrust, t, pressure)
         ax.grid(True)
-        ax.legend(['thrust[N]', 'pressure[bar]'])
+        ax.legend(['thrust[N]'])
         return fig
 
     def plot_one(self, inputdata, name):
