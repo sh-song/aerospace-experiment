@@ -24,6 +24,7 @@ class Plotter:
         if not os.path.exists(self.dir):
             os.makedirs(self.dir)
         fig.savefig(self.dir + self.name + '.png')
+        print(f"{self.dir + self.name + '.png'} saved")
         return fig
 
     def plot_two(self, inputdata, name):
@@ -48,9 +49,10 @@ class Plotter:
         fig, ax = plt.subplots(1,1)
         fig.set_size_inches(15, 5)
         fig.suptitle(name, fontsize=16)
-        t = inputdata[:, 0].tolist()
-        y1 = inputdata[:, 1].tolist()
-        ax.plot(t, y1, label='Thrust[N]')
+        off = 150
+        t = inputdata[off:, 0].tolist()
+        y1 = inputdata[off:, 1].tolist()
+        ax.plot(t, y1, label='thrust[N]')
         ax.grid(True)
         ax.legend()
         return fig

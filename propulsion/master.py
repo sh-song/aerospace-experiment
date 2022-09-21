@@ -24,7 +24,6 @@ def generate_data_dict():
                     '10bar':[], '14bar':[]}
 
 if __name__ == "__main__":
-    prefix = 'preprocessed'
 
     trt_names = ['2bar', '6bar', '10bar', '14bar']
     #Load raw data
@@ -38,6 +37,8 @@ if __name__ == "__main__":
         data_shapes[trt].append(raw.shape)
 
     #1-1 Preprocessing
+
+    prefix = 'preprosecessed'
     preprocessed_data = generate_data_dict()
     for trt, replicates in rawdata.items():
         for i, rep in enumerate(replicates):
@@ -46,6 +47,8 @@ if __name__ == "__main__":
             preprocessed_data[trt].append(preprocessed)
 
     #1-2 mdot
+
+    prefix = 'mdot'
     mdot_data = generate_data_dict()
     for trt, replicates in preprocessed_data.items():
         for i, rep in enumerate(replicates):
@@ -54,6 +57,7 @@ if __name__ == "__main__":
             mdot_data[trt].append(output)
 
     #1-3 P_e
+    prefix = 'P_e'
     P_e_data = generate_data_dict()
     for trt, replicates in preprocessed_data.items():
         for i, rep in enumerate(replicates):
@@ -61,14 +65,15 @@ if __name__ == "__main__":
             output = cc.run('exit_pressure')
             P_e_data[trt].append(output)
 
-    #2-1 thrust
+    #2-1 
+    prefix = 'thrust'
     mdot_and_P_e_data = generate_data_dict()
     for trt in trt_names:
-        for i in range(2):
+        for i in range(3):
             new_data = np.zeros(data_shapes[trt][i])
-            new_data[:, 0] = mdot_data[trt][i][:, 0]
-            new_data[:, 1] = mdot_data[trt][i][:, 1]
-            new_data[:, 2] = P_e_data[trt][i][:, 1]
+            new_data[:, 0] = mdot_data[trt][i][:, 0].copy()
+            new_data[:, 1] = mdot_data[trt][i][:, 1].copy()
+            new_data[:, 2] = P_e_data[trt][i][:, 1].copy()
             mdot_and_P_e_data[trt].append(new_data)
 
     thrust_data = generate_data_dict()
@@ -78,30 +83,27 @@ if __name__ == "__main__":
             output = cc.run('thrust')
             thrust_data[trt].append(output)
 
-    #plot
-    figure_data = generate_data_dict()
-    for trt, replicates in preprocessed_data.items():
-        for i, rep in enumerate(replicates):
-            plotter = Plotter(prefix, trt, i)
-            output = plotter.make_plot(rep, False)
-            figure_data[trt].append(output)
-    
-    #save plots
+    #2-2
+
+    #save result
+    prefix = 'thrust'
     total_fig = np.zeros([500*4, 1500*3, 4])
     i = 0
-    for key, items in figure_data.items():
-        for j, fig in enumerate(items):
+    for trt, replicates in thrust_data.items():########
+        for j, rep in enumerate(replicates):
+            plotter = Plotter(prefix, trt, j)
+            fig = plotter.make_plot(rep, True)
             fig.canvas.draw()
             X = np.array(fig.canvas.renderer.buffer_rgba())
             total_fig[500*i:500*(i+1), 1500*j:1500*(j+1), :] = X
+            plt.close(fig)
         i +=1
-            
-    cv2.imwrite('figures/out.png', total_fig)
+           
+    cv2.imwrite('figures/' + prefix+ '.png', total_fig)
 
-    
     #save csv
-    for trt, replicates in mdot_data.items():
+    for trt, replicates in thrust_data.items():#########
         for i, rep in enumerate(replicates):
             saver = CSVSaver(prefix, trt, str(i))
             saver.save_csv(rep)
-    
+    #i
