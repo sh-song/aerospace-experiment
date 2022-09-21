@@ -84,15 +84,25 @@ if __name__ == "__main__":
             thrust_data[trt].append(output)
 
     #2-2
+    prefix = 'thrust_compare'
+    thrust_compare_data = generate_data_dict()
+    for trt in trt_names:
+        for i in range(3):
+            new_data = np.zeros(data_shapes[trt][i])
+            new_data[:, 0] = mdot_data[trt][i][:, 0].copy()
+            new_data[:, 1] = preprocessed_data[trt][i][:, 1].copy()
+            new_data[:, 2] = thrust_data[trt][i][:, 1].copy()
+            thrust_compare_data[trt].append(new_data)
+
 
     #save result
-    prefix = 'thrust'
+    prefix = 'thrust_compare'
     total_fig = np.zeros([500*4, 1500*3, 4])
     i = 0
-    for trt, replicates in thrust_data.items():########
+    for trt, replicates in thrust_compare_data.items():########
         for j, rep in enumerate(replicates):
             plotter = Plotter(prefix, trt, j)
-            fig = plotter.make_plot(rep, True)
+            fig = plotter.make_plot(rep, False)
             fig.canvas.draw()
             X = np.array(fig.canvas.renderer.buffer_rgba())
             total_fig[500*i:500*(i+1), 1500*j:1500*(j+1), :] = X
@@ -102,7 +112,7 @@ if __name__ == "__main__":
     cv2.imwrite('figures/' + prefix+ '.png', total_fig)
 
     #save csv
-    for trt, replicates in thrust_data.items():#########
+    for trt, replicates in thrust_compare_data.items():#########
         for i, rep in enumerate(replicates):
             saver = CSVSaver(prefix, trt, str(i))
             saver.save_csv(rep)

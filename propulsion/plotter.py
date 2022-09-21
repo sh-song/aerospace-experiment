@@ -42,7 +42,7 @@ class Plotter:
 
         ax.plot(t, thrust, t, pressure)
         ax.grid(True)
-        ax.legend(['thrust[N]', 'pressure[bar]'])
+        ax.legend(['thrust measured[N]', 'thrust estimated[N]'])
         return fig
 
     def plot_one(self, inputdata, name):
