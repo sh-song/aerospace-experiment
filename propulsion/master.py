@@ -8,6 +8,7 @@ from filters import LowPassFilter as LPF
 from preprocessor import Preprocessor
 from calculator import Calculator
 from plotter import Plotter
+from csv_saver import CSVSaver
 def load_data(rawdata_dir, filename):
         trt = filename.split('_')[1]
         file_dir = rawdata_dir + filename
@@ -20,7 +21,7 @@ def generate_data_dict():
                     '10bar':[], '14bar':[]}
 
 if __name__ == "__main__":
-    prefix = 'thrust'
+    prefix = 'mdot'
 
     trt_names = ['2bar', '6bar', '10bar', '14bar']
     #Load raw data
@@ -76,8 +77,14 @@ if __name__ == "__main__":
 
 
     #Plot
-    for trt, replicates in thrust_data.items():
+    # for trt, replicates in thrust_data.items():
+    #     for i, rep in enumerate(replicates):
+    #         plotter = Plotter(prefix, trt, str(i))
+    #         plotter.save_plot(rep, True)
+    
+    #save csv
+    for trt, replicates in mdot_data.items():
         for i, rep in enumerate(replicates):
-            plotter = Plotter(prefix, trt, str(i))
-            plotter.save_plot(rep, True)
+            saver = CSVSaver(prefix, trt, str(i))
+            saver.save_csv(rep)
     

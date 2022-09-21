@@ -16,10 +16,6 @@ class Plotter:
         return (min1 if min1<min2 else min2,
                 max1 if max1>max2 else max2) 
         
-
-    def visualize(self, rep):
-        pass
-
     def save_plot(self, rep, isOne=False):
         if isOne:
             fig = self.plot_one(rep, self.name)
