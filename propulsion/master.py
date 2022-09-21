@@ -112,9 +112,10 @@ if __name__ == "__main__":
 
 
     #save result
+    prefix = 'preprocessed'
     total_fig = np.zeros([500*4, 1500*3, 4])
     i = 0
-    for trt, replicates in thrust_compare_data.items():########
+    for trt, replicates in preprocessed_data.items():########
         for j, rep in enumerate(replicates):
             plotter = Plotter(prefix, trt, j)
             fig = plotter.make_plot(rep, False)
@@ -127,7 +128,7 @@ if __name__ == "__main__":
     cv2.imwrite('figures/' + prefix+ '.png', total_fig)
 
     #save csv
-    for trt, replicates in thrust_compare_data.items():#########
+    for trt, replicates in preprocessed_data.items():#########
         for i, rep in enumerate(replicates):
             saver = CSVSaver(prefix, trt, str(i))
             saver.save_csv(rep)

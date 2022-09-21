@@ -77,6 +77,7 @@ class Preprocessor:
 
        #Scaling
         V_TO_BAR = 10.0512
+        # V_TO_BAR = 20.0
         V_TO_N = 198.2
         preprocessed[:, 1] = self.convert_scale(preprocessed[:, 1], V_TO_N)
         preprocessed[:, 2] = self.convert_scale(preprocessed[:, 2], V_TO_BAR)
