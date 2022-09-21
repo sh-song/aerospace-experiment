@@ -38,12 +38,15 @@ class Preprocessor:
             filtered[i] = lpf.filter(val)
         return filtered
     
-    def zeroing(self, data):
-        target_range = len(data) // 5
+    def zeroing(self, data, reference=0.0, isPrint=False):
+        target_range = len(data) // 6
         front_mean = np.mean(data[:target_range])
-        back_mean = np.mean(data[target_range:])
-        offset = (front_mean + back_mean) / 2
-        return data - offset
+        # back_mean = np.mean(data[target_range:])
+        offset = front_mean
+        # offset = (front_mean + back_mean) / 2
+        if isPrint:
+            print(f"front mean: {front_mean} ")
+        return data - offset + reference
 
     def plot(self, inputdata, name):
         fig, ax = plt.subplots(1,1)
@@ -72,14 +75,15 @@ class Preprocessor:
         preprocessed[:, 1] = self.filtering(self.raw[:, 1], 0.2)
         preprocessed[:, 2] = self.filtering(self.raw[:, 2], 2)
 
-        #Zeroing for thrust
-        preprocessed[:, 1] = self.zeroing(preprocessed[:, 1])
-
-        #Scaling
+       #Scaling
         V_TO_BAR = 10.0512
         V_TO_N = 109.7
         preprocessed[:, 1] = self.convert_scale(preprocessed[:, 1], V_TO_N)
         preprocessed[:, 2] = self.convert_scale(preprocessed[:, 2], V_TO_BAR)
+
+        #Zeroing for thrust
+        preprocessed[:, 1] = self.zeroing(preprocessed[:, 1])
+        preprocessed[:, 2] = self.zeroing(preprocessed[:, 2], reference=1.0, isPrint=True)
   
         #Plot and Save
         # fig = self.plot(preprocessed, self.name)

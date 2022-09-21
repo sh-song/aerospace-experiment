@@ -9,7 +9,10 @@ from preprocessor import Preprocessor
 from calculator import Calculator
 from plotter import Plotter
 from csv_saver import CSVSaver
+import matplotlib.image
+import cv2
 def load_data(rawdata_dir, filename):
+
         trt = filename.split('_')[1]
         file_dir = rawdata_dir + filename
         raw = pd.read_csv(file_dir, sep='\t')
@@ -21,7 +24,7 @@ def generate_data_dict():
                     '10bar':[], '14bar':[]}
 
 if __name__ == "__main__":
-    prefix = 'mdot'
+    prefix = 'preprocessed'
 
     trt_names = ['2bar', '6bar', '10bar', '14bar']
     #Load raw data
@@ -75,12 +78,26 @@ if __name__ == "__main__":
             output = cc.run('thrust')
             thrust_data[trt].append(output)
 
+    #plot
+    figure_data = generate_data_dict()
+    for trt, replicates in preprocessed_data.items():
+        for i, rep in enumerate(replicates):
+            plotter = Plotter(prefix, trt, i)
+            output = plotter.make_plot(rep, False)
+            figure_data[trt].append(output)
+    
+    #save plots
+    total_fig = np.zeros([500*4, 1500*3, 4])
+    i = 0
+    for key, items in figure_data.items():
+        for j, fig in enumerate(items):
+            fig.canvas.draw()
+            X = np.array(fig.canvas.renderer.buffer_rgba())
+            total_fig[500*i:500*(i+1), 1500*j:1500*(j+1), :] = X
+        i +=1
+            
+    cv2.imwrite('figures/out.png', total_fig)
 
-    #Plot
-    # for trt, replicates in thrust_data.items():
-    #     for i, rep in enumerate(replicates):
-    #         plotter = Plotter(prefix, trt, str(i))
-    #         plotter.save_plot(rep, True)
     
     #save csv
     for trt, replicates in mdot_data.items():
