@@ -14,7 +14,8 @@ class Calculator:
 
         #2-1
         self.T_e = self.calc_T_e()
-        self.V_e = self.calc_V_e()
+        self.V_e = 589.2
+        # self.V_e = self.calc_V_e()
         self.P_b = 1 #bar
         self.A_e = 4 * self.Astar
         
@@ -22,11 +23,15 @@ class Calculator:
     def calc_T_e(self):
         a = (self.gamma - 1) / 2
         b = 1 + a*(self.M**2)
-        return self.T / b
+        output = self.T / b
+        print(f"T_e: {output}")
+        return output
     def calc_V_e(self):
         a = self.gamma * self.R * self.T_e
         b = math.sqrt(a)
-        return self.M * b
+        output = self.M * b
+        print(f"V_e: {output}")
+        return output
  
     def calc_mdot(self, P):
 

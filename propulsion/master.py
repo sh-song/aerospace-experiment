@@ -11,6 +11,7 @@ from plotter import Plotter
 from csv_saver import CSVSaver
 import matplotlib.image
 import cv2
+from anova import ANOVA
 def load_data(rawdata_dir, filename):
 
         trt = filename.split('_')[1]
@@ -95,8 +96,22 @@ if __name__ == "__main__":
             thrust_compare_data[trt].append(new_data)
 
 
+    # #Additional experiment
+    # prefix = 'additional_exp_1'
+    # anova_table_data = generate_data_dict()
+    # for trt in trt_names:
+    #     for i in range(3):
+    #         new_data = np.zeros(data_shapes[trt][i])
+    #         input = thrust_data[trt][i][:, 1].copy()
+    #         anova = ANOVA(input)
+    #         result = anova.run()
+    #         new_data[:, 0] = mdot_data[trt][i][:, 0].copy()
+    #         new_data[:, 1] = preprocessed_data[trt][i][:, 1].copy()
+    #         new_data[:, 2] = thrust_data[trt][i][:, 1].copy()
+    #         anova_table_data[trt].append(new_data)
+
+
     #save result
-    prefix = 'thrust_compare'
     total_fig = np.zeros([500*4, 1500*3, 4])
     i = 0
     for trt, replicates in thrust_compare_data.items():########
