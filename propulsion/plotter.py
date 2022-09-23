@@ -52,7 +52,8 @@ class Plotter:
         off = 150
         t = inputdata[off:, 0].tolist()
         y1 = inputdata[off:, 1].tolist()
-        ax.plot(t, y1, label='thrust[N]')
+        # ax.plot(t, y1, label='thrust[N]')
+        ax.scatter(t, y1, label='thrust[N]')
         ax.grid(True)
         ax.legend()
         return fig

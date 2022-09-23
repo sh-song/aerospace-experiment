@@ -1,6 +1,6 @@
 class ANOVA:
     def __init__(self, data):
-        self.data = data.to_list()
+        self.data = data
         self.data_size = len(self.data)
         pass
     def get_observation(self,stepsize=3):
@@ -14,5 +14,7 @@ class ANOVA:
         return slopes
 
     def run(self):
-        obs = self.get_observation()
+        # obs = self.get_observation()
+        print(self.data.shape)
+        return self.data
         
