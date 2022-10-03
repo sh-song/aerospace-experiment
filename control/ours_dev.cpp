@@ -134,6 +134,7 @@ public:
 
 int main() {
     
+    // Setup
     // Motor motor();
     Cds cds1(Cds1Pin, 3.3);
     Cds cds2(Cds2Pin, 1.1);
@@ -142,6 +143,7 @@ int main() {
     int c2[2] = {0, 0};
     double stepsize;
 
+    // Loop
     while (1) {
         
         std::this_thread::sleep_for(std::chrono::milliseconds(200));
